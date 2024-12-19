@@ -62,15 +62,20 @@ GreenCycle/
 ## Challenges
 - Integrating real-time map updates.
 - Optimizing database queries for user data.
+
 ---
 
 ## License
-This project is licensed under the MIT License.
+- This project is licensed under the MIT License.
+
 ---
 
 ## Contributors
 - [CloudTechy](https://github.com/CloudTechy) - Project Lead
+
 ---
 
 ## Contact
 For any queries, reach out to us at [conyekelu@yahoo.com](mailto:conyekelu@yahoo.com).
+
+---
