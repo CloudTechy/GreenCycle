@@ -36,7 +36,7 @@ const App = () => {
             <ul className="list-group mb-4">
                 {facts.map((fact, index) => (
                     <li key={index} className="list-group-item">
-                        {fact}
+                        {fact.fact}
                     </li>
                 ))}
             </ul>
