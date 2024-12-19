@@ -1,6 +1,8 @@
 from flask import Flask, jsonify, request
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 
 @app.route('/')
 def home():
@@ -24,7 +26,7 @@ def get_facts():
     ]
     return jsonify(facts)
 
-@app.route('/api/centers', methods=['GET'])
+@app.route('/api/centers', strict_slashes=False, methods=['GET'])
 def get_centers():
     centers = [
         {
