@@ -29,20 +29,23 @@ const App = () => {
     }, []);
 
     return (
-        <div>
-            <h1>Welcome to GreenCycle!</h1>
-            <h2>Recycling Facts</h2>
-            <ul>
+        <div className="container my-4">
+            <h1 className="text-center text-success mb-4">Welcome to GreenCycle!</h1>
+            
+            <h2 className="text-primary">Recycling Facts</h2>
+            <ul className="list-group mb-4">
                 {facts.map((fact, index) => (
-                    <li key={index}>{fact.fact}</li>
+                    <li key={index} className="list-group-item">
+                        {fact}
+                    </li>
                 ))}
             </ul>
 
-            <h2>Recycling Centers</h2>
-            <ul>
+            <h2 className="text-primary">Recycling Centers</h2>
+            <ul className="list-group">
                 {centers.map((center, index) => (
-                    <li key={index}>
-                        {center.name} - {center.address}, {center.city}
+                    <li key={index} className="list-group-item">
+                        <strong>{center.name}</strong> - {center.address}, {center.city}
                     </li>
                 ))}
             </ul>
