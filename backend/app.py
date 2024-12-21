@@ -33,6 +33,7 @@ def get_centers():
             'id': 1,
             'name': 'Goodwill',
             'address': '1234 Main Street, Houston, TX 77001',
+            'city': 'Houston',
             'phone': '123-456-7890',
             'website': 'https://www.goodwill.org'
         },
@@ -40,6 +41,7 @@ def get_centers():
             'id': 2,
             'name': 'Salvation Army',
             'address': '789 Renew Ln, Renew, TX 77002',
+            'city': 'Renew',
             'phone': '098-765-4321',
             'website': 'https://www.salvationarmy.org'
         },
@@ -47,6 +49,7 @@ def get_centers():
             'id': 3,
             'name': 'Habitat for Humanity',
             'address': '123 Greenway Blvd, Greenville, TX 77003',
+            'city': 'Greenville',
             'phone': '456-789-0123',
             'website': 'https://www.habitat.org'
         }
