@@ -8,25 +8,33 @@ const App = () => {
   const [filterCity, setFilterCity] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [error, setError] = useState(null);
+  const [loadingFacts, setLoadingFacts] = useState(false);
+  const [loadingCenters, setLoadingCenters] = useState(false);
 
   const itemsPerPage = 5;
 
   useEffect(() => {
     const getFacts = async () => {
+      setLoadingFacts(true);
       try {
         const response = await fetchFacts();
         setFacts(response.data);
       } catch (err) {
         setError("Failed to fetch facts. Please try again later.");
+      } finally {
+        setLoadingFacts(false);
       }
     };
 
     const getCenters = async () => {
+      setLoadingCenters(true);
       try {
         const response = await fetchCenters();
         setCenters(response.data);
       } catch (err) {
         setError("Failed to fetch recycling centers. Please try again later.");
+      } finally {
+        setLoadingCenters(false);
       }
     };
 
@@ -47,9 +55,18 @@ const App = () => {
   const paginatedFacts = filteredFacts.slice(startIndex, endIndex);
   const paginatedCenters = filteredCenters.slice(startIndex, endIndex);
   return (
-    <div className="container my-4">
+    <div className="container my-5">
       <h1 className="text-center text-success mb-4">Welcome to GreenCycle!</h1>
-      {error && <div className="alert alert-danger">{error}</div>}
+      {error && (
+        <div
+          className="alert alert-danger alert-dismissible fade show"
+          role="alert"
+        >
+          {error}
+        </div>
+      )}
+
+      <h2 className="text-center text-primary">Recycling Facts</h2>
       <div className="mb-3">
         <input
           type="text"
@@ -59,35 +76,43 @@ const App = () => {
           onChange={(e) => setSearchTerm(e.target.value)}
         />
       </div>
-
-      <h2 className="text-primary">Recycling Facts</h2>
-      <ul className="list-group mb-4">
+      <div className="row">
         {paginatedFacts.map((fact, index) => (
-          <li key={index} className="list-group-item">
-            {fact.fact}
-          </li>
+          <div key={index} className="col-md-4">
+            <div className="card mb-3">
+              <div className="card-body">
+                <p className="card-text">{fact.fact}</p>
+              </div>
+            </div>
+          </div>
         ))}
-      </ul>
-      <div className="d-flex justify-content-between">
-          <button
-            className="btn btn-secondary"
-            disabled={currentPage === 1}
-            onClick={() => setCurrentPage(currentPage - 1)}
-          >
-            Previous
-          </button>
-          <span>Page {currentPage}</span>
-          <button
-            className="btn btn-secondary"
-            disabled={
-              endIndex >= filteredFacts.length 
-            }
-            onClick={() => setCurrentPage(currentPage + 1)}
-          >
-            Next
-          </button>
-        </div>
+      </div>
 
+      {loadingFacts && (
+        <div className="spinner-border text-primary" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+      )}
+      {!loadingFacts && filteredFacts.length === 0 && <p>No facts found.</p>}
+      <div className="d-flex justify-content-between">
+        <button
+          className="btn btn-secondary"
+          disabled={currentPage === 1}
+          onClick={() => setCurrentPage(currentPage - 1)}
+        >
+          Previous
+        </button>
+        <span>Page {currentPage}</span>
+        <button
+          className="btn btn-secondary"
+          disabled={endIndex >= filteredFacts.length}
+          onClick={() => setCurrentPage(currentPage + 1)}
+        >
+          Next
+        </button>
+      </div>
+
+      <h2 className="text-center text-primary">Recycling Centers</h2>
       <div className="mb-3">
         <select
           className="form-select"
@@ -104,36 +129,45 @@ const App = () => {
           )}
         </select>
       </div>
-
-      <h2 className="text-primary">Recycling Centers</h2>
-      
-
-      <ul className="list-group">
+      <div className="row">
         {paginatedCenters.map((center, index) => (
-          <li key={index} className="list-group-item">
-            <strong>{center.name}</strong> - {center.address}, {center.city}
-          </li>
+          <div key={index} className="col-md-6">
+            <div className="card mb-3">
+              <div className="card-body">
+                <h5 className="card-title">{center.name}</h5>
+                <p className="card-text">
+                  {center.address}, {center.city}
+                </p>
+              </div>
+            </div>
+          </div>
         ))}
-        <div className="d-flex justify-content-between">
-          <button
-            className="btn btn-secondary"
-            disabled={currentPage === 1}
-            onClick={() => setCurrentPage(currentPage - 1)}
-          >
-            Previous
-          </button>
-          <span>Page {currentPage}</span>
-          <button
-            className="btn btn-secondary"
-            disabled={
-              endIndex >= filteredCenters.length
-            }
-            onClick={() => setCurrentPage(currentPage + 1)}
-          >
-            Next
-          </button>
+      </div>
+      {loadingCenters && (
+        <div className="spinner-border text-primary" role="status">
+          <span className="visually-hidden">Loading...</span>
         </div>
-      </ul>
+      )}
+      {!loadingCenters && filteredCenters.length === 0 && (
+        <p>No recycling centers found.</p>
+      )}
+      <div className="d-flex justify-content-between">
+        <button
+          className="btn btn-secondary"
+          disabled={currentPage === 1}
+          onClick={() => setCurrentPage(currentPage - 1)}
+        >
+          Previous
+        </button>
+        <span>Page {currentPage}</span>
+        <button
+          className="btn btn-secondary"
+          disabled={endIndex >= filteredCenters.length}
+          onClick={() => setCurrentPage(currentPage + 1)}
+        >
+          Next
+        </button>
+      </div>
     </div>
   );
 };
