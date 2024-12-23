@@ -57,6 +57,13 @@ const App = () => {
   return (
     <div className="container my-5">
       <h1 className="text-center text-success mb-4">Welcome to GreenCycle!</h1>
+      <nav className="navbar navbar-expand-lg">
+        <div className="container-fluid">
+          <a className="navbar-brand" href="/">
+            GreenCycle
+          </a>
+        </div>
+      </nav>
       {error && (
         <div
           className="alert alert-danger alert-dismissible fade show"
@@ -66,7 +73,7 @@ const App = () => {
         </div>
       )}
 
-      <h2 className="text-center text-primary">Recycling Facts</h2>
+      <h2 className="text-center text-success">Recycling Facts</h2>
       <div className="mb-3">
         <input
           type="text"
@@ -94,25 +101,27 @@ const App = () => {
         </div>
       )}
       {!loadingFacts && filteredFacts.length === 0 && <p>No facts found.</p>}
-      <div className="d-flex justify-content-between">
-        <button
-          className="btn btn-secondary"
-          disabled={currentPage === 1}
-          onClick={() => setCurrentPage(currentPage - 1)}
-        >
-          Previous
-        </button>
-        <span>Page {currentPage}</span>
-        <button
-          className="btn btn-secondary"
-          disabled={endIndex >= filteredFacts.length}
-          onClick={() => setCurrentPage(currentPage + 1)}
-        >
-          Next
-        </button>
-      </div>
+      {filteredFacts.length > 5 && (
+        <div className="d-flex justify-content-between">
+          <button
+            className="btn btn-primary"
+            disabled={currentPage === 1}
+            onClick={() => setCurrentPage(currentPage - 1)}
+          >
+            Previous
+          </button>
+          <span>Page {currentPage}</span>
+          <button
+            className="btn btn-primary"
+            disabled={endIndex >= filteredFacts.length}
+            onClick={() => setCurrentPage(currentPage + 1)}
+          >
+            Next
+          </button>
+        </div>
+      )}
 
-      <h2 className="text-center text-primary">Recycling Centers</h2>
+      <h2 className="text-center text-success">Recycling Centers</h2>
       <div className="mb-3">
         <select
           className="form-select"
@@ -134,7 +143,7 @@ const App = () => {
           <div key={index} className="col-md-6">
             <div className="card mb-3">
               <div className="card-body">
-                <h5 className="card-title">{center.name}</h5>
+                <h5 className="card-title text-primary">{center.name}</h5>
                 <p className="card-text">
                   {center.address}, {center.city}
                 </p>
@@ -151,23 +160,28 @@ const App = () => {
       {!loadingCenters && filteredCenters.length === 0 && (
         <p>No recycling centers found.</p>
       )}
-      <div className="d-flex justify-content-between">
-        <button
-          className="btn btn-secondary"
-          disabled={currentPage === 1}
-          onClick={() => setCurrentPage(currentPage - 1)}
-        >
-          Previous
-        </button>
-        <span>Page {currentPage}</span>
-        <button
-          className="btn btn-secondary"
-          disabled={endIndex >= filteredCenters.length}
-          onClick={() => setCurrentPage(currentPage + 1)}
-        >
-          Next
-        </button>
-      </div>
+      {loadingCenters.length > 5 && (
+        <div className="d-flex justify-content-between">
+          <button
+            className="btn btn-primary"
+            disabled={currentPage === 1}
+            onClick={() => setCurrentPage(currentPage - 1)}
+          >
+            Previous
+          </button>
+          <span>Page {currentPage}</span>
+          <button
+            className="btn btn-primary"
+            disabled={endIndex >= filteredCenters.length}
+            onClick={() => setCurrentPage(currentPage + 1)}
+          >
+            Next
+          </button>
+        </div>
+      )}
+      <footer className="text-center mt-5 p-3">
+        &copy; 2024 GreenCycle. All rights reserved.
+      </footer>
     </div>
   );
 };
