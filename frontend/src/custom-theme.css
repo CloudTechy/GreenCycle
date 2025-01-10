@@ -53,12 +53,12 @@ footer {
 }
 
 input.form-control {
-    border: 2px solid #fa2f08;
+    border: 2px solid #198754;
     border-radius: 25px;
     padding: 10px;
 }
 
 input.form-control:focus {
     border-color: #f7b316;
-    box-shadow: 0 0 10px rgba(250, 47, 8, 0.5);
+    box-shadow: 0 0 10px rgba(8, 250, 109, 0.5);
 }
