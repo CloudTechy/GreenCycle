@@ -11,3 +11,84 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+@import './custom-theme.css';
+
+.carousel {
+  display: flex;
+  overflow: hidden;
+  width: 100%;
+  position: relative;
+}
+
+.carousel-inner {
+  display: flex;
+  transition: transform 0.5s ease;
+}
+
+.carousel-item {
+  min-width: 100%;
+  box-sizing: border-box;
+}
+
+.carousel-control-prev,
+.carousel-control-next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(0, 0, 0, 0.5);
+  border: none;
+  color: white;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.carousel-control-prev {
+  left: 10px;
+}
+
+.carousel-control-next {
+  right: 10px;
+}
+
+.carousel-indicators {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 5px;
+}
+
+.carousel-indicators button {
+  background-color: rgba(0, 0, 0, 0.5);
+  border: none;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.carousel-indicators button.active {
+  background-color: white;
+}
+
+.hero-banner {
+  padding: 40px 20px;
+  background-image: url('../public/assets/images/hero.jpg');
+  background-position: center;
+  background-size: cover;
+  /* height: calc(100vh - 56px); */
+
+}
+
+.main-section {
+  background-image: url('../public/assets/images/segregation.jpg');
+  background-position: center;
+  background-size: cover;
+  padding-bottom: 40px;
+}
+
+.input-group {
+  width: 50% !important;
+  margin: auto;
+}

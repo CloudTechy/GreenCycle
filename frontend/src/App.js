@@ -1,175 +1,125 @@
 import React, { useState, useEffect } from "react";
-import { fetchFacts, fetchCenters } from "./services/api";
+import { fetchFacts } from "./services/api";
+import HomePage from "./pages/HomePage";
+import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
+
+import FactsPage from "./pages/FactsPage";
+import CentersPage from "./pages/CentersPage";
 
 const App = () => {
   const [facts, setFacts] = useState([]);
-  const [centers, setCenters] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [filterCity, setFilterCity] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
-  const [error, setError] = useState(null);
-  const [loadingFacts, setLoadingFacts] = useState(false);
-  const [loadingCenters, setLoadingCenters] = useState(false);
-
-  const itemsPerPage = 5;
+  const [favorites, setFavorites] = useState([]);
 
   useEffect(() => {
     const getFacts = async () => {
-      setLoadingFacts(true);
+      const storedFavorites =
+        JSON.parse(localStorage.getItem("favorites")) || [];
+      setFavorites(storedFavorites);
+      // setLoadingFacts(true);
       try {
         const response = await fetchFacts();
         setFacts(response.data);
       } catch (err) {
-        setError("Failed to fetch facts. Please try again later.");
-      } finally {
-        setLoadingFacts(false);
-      }
-    };
-
-    const getCenters = async () => {
-      setLoadingCenters(true);
-      try {
-        const response = await fetchCenters();
-        setCenters(response.data);
-      } catch (err) {
-        setError("Failed to fetch recycling centers. Please try again later.");
-      } finally {
-        setLoadingCenters(false);
+        // setError("Failed to fetch facts. Please try again later.");
       }
     };
 
     getFacts();
-    getCenters();
   }, []);
 
-  const filteredFacts = facts.filter((fact) =>
-    fact.fact.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-  const filteredCenters = centers.filter(
-    (center) => filterCity === "" || center.city === filterCity
-  );
+  const isFavorited = (center) => {
+    //check that the user is logged in
+    // if (!user) {
+    //   return false;
+    // }
+    //check if the user has favorited the center
+    console.log(center.id, favorites.includes(center.id));
+    return favorites.includes(center.id);
+  };
 
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
+  const toggleFavorite = (center) => {
+    const updatedFavorites = [...favorites];
+    const favoriteIndex = updatedFavorites.indexOf(center.id);
 
-  const paginatedFacts = filteredFacts.slice(startIndex, endIndex);
-  const paginatedCenters = filteredCenters.slice(startIndex, endIndex);
+    if (favoriteIndex === -1) {
+      updatedFavorites.push(center.id);
+    } else {
+      updatedFavorites.splice(favoriteIndex, 1);
+    }
+
+    // Update the favorites in both state and localStorage
+    setFavorites(updatedFavorites);
+    localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
+  };
+
   return (
-    <div className="container my-5">
-      <h1 className="text-center text-success mb-4">Welcome to GreenCycle!</h1>
-      {error && (
-        <div
-          className="alert alert-danger alert-dismissible fade show"
-          role="alert"
-        >
-          {error}
-        </div>
-      )}
-
-      <h2 className="text-center text-primary">Recycling Facts</h2>
-      <div className="mb-3">
-        <input
-          type="text"
-          className="form-control"
-          placeholder="Search facts..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
-      </div>
-      <div className="row">
-        {paginatedFacts.map((fact, index) => (
-          <div key={index} className="col-md-4">
-            <div className="card mb-3">
-              <div className="card-body">
-                <p className="card-text">{fact.fact}</p>
-              </div>
+    <Router>
+      <div>
+        {/* Navbar */}
+        <nav className="navbar p-0 m-0 navbar-expand-lg navbar-light bg-light">
+          <div className="container-fluid">
+            <a
+              className="navbar-brand"
+              href="/"
+              style={{
+                color: "green",
+                fontWeight: "bold",
+                fontSize: "1.5rem",
+                fontFamily: "'Courier New', Courier, monospace",
+              }}
+            >
+              GreenCycle
+            </a>
+            <button
+              className="navbar-toggler"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#navbarNav"
+              aria-controls="navbarNav"
+              aria-expanded="false"
+              aria-label="Toggle navigation"
+            >
+              <span className="navbar-toggler-icon"></span>
+            </button>
+            <div className="collapse navbar-collapse" id="navbarNav">
+              <ul className="navbar-nav ms-auto">
+                <li className="nav-item">
+                  <Link className="nav-link" to="/">
+                    Home
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link className="nav-link" to="/facts">
+                    Fact
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link className="nav-link" to="/centers">
+                    Center
+                  </Link>
+                </li>
+              </ul>
             </div>
           </div>
-        ))}
-      </div>
+        </nav>
 
-      {loadingFacts && (
-        <div className="spinner-border text-primary" role="status">
-          <span className="visually-hidden">Loading...</span>
-        </div>
-      )}
-      {!loadingFacts && filteredFacts.length === 0 && <p>No facts found.</p>}
-      <div className="d-flex justify-content-between">
-        <button
-          className="btn btn-secondary"
-          disabled={currentPage === 1}
-          onClick={() => setCurrentPage(currentPage - 1)}
-        >
-          Previous
-        </button>
-        <span>Page {currentPage}</span>
-        <button
-          className="btn btn-secondary"
-          disabled={endIndex >= filteredFacts.length}
-          onClick={() => setCurrentPage(currentPage + 1)}
-        >
-          Next
-        </button>
+        {/* Main Routes */}
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <HomePage
+                facts={facts}
+                isFavorited={isFavorited}
+                toggleFavorite={toggleFavorite}
+              />
+            }
+          />
+          <Route path="/facts" element={<FactsPage />} />
+          <Route path="/centers" element={<CentersPage />} />
+        </Routes>
       </div>
-
-      <h2 className="text-center text-primary">Recycling Centers</h2>
-      <div className="mb-3">
-        <select
-          className="form-select"
-          value={filterCity}
-          onChange={(e) => setFilterCity(e.target.value)}
-        >
-          <option value="">All Cities</option>
-          {Array.from(new Set(centers.map((center) => center.city))).map(
-            (city, index) => (
-              <option key={index} value={city}>
-                {city}
-              </option>
-            )
-          )}
-        </select>
-      </div>
-      <div className="row">
-        {paginatedCenters.map((center, index) => (
-          <div key={index} className="col-md-6">
-            <div className="card mb-3">
-              <div className="card-body">
-                <h5 className="card-title">{center.name}</h5>
-                <p className="card-text">
-                  {center.address}, {center.city}
-                </p>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-      {loadingCenters && (
-        <div className="spinner-border text-primary" role="status">
-          <span className="visually-hidden">Loading...</span>
-        </div>
-      )}
-      {!loadingCenters && filteredCenters.length === 0 && (
-        <p>No recycling centers found.</p>
-      )}
-      <div className="d-flex justify-content-between">
-        <button
-          className="btn btn-secondary"
-          disabled={currentPage === 1}
-          onClick={() => setCurrentPage(currentPage - 1)}
-        >
-          Previous
-        </button>
-        <span>Page {currentPage}</span>
-        <button
-          className="btn btn-secondary"
-          disabled={endIndex >= filteredCenters.length}
-          onClick={() => setCurrentPage(currentPage + 1)}
-        >
-          Next
-        </button>
-      </div>
-    </div>
+    </Router>
   );
 };
-
 export default App;
