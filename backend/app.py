@@ -30,9 +30,9 @@ def create_app(config_class='config.DevelopmentConfig'):
     
     # Initialize Migrate
     migrate.init_app(app, db)
-    
+
     # automatically upgrade the database
-    @app.before_first_request
+    @app.before_request
     def initialize_database():
         """Automatically apply migrations."""
         with app.app_context():
