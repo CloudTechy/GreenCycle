@@ -3,7 +3,7 @@ from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from routes import init_routes
 from models import db 
-from flask_migrate import Migrate
+from flask_migrate import Migrate, upgrade
 from dotenv import load_dotenv
 import os
 
@@ -27,12 +27,21 @@ def create_app(config_class='config.DevelopmentConfig'):
     # Initialize the database
     db.init_app(app)
     
+    
     # Initialize Migrate
     migrate.init_app(app, db)
+    
+    # automatically upgrade the database
+    @app.before_first_request
+    def initialize_database():
+        """Automatically apply migrations."""
+        with app.app_context():
+            upgrade()
     
     # Register Blueprints
     from routes import init_routes
     init_routes(app, prefix='/api')
+
     
     # Define your routes
     @app.route('/')
