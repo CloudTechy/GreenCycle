@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import MapView from "../components/MapView";
 import { fetchCenters } from "../services/api";
+import CenterView from "../components/CenterView";
 
 const HomePage = (props) => {
   const facts = props.facts;
@@ -10,6 +11,7 @@ const HomePage = (props) => {
   const [filterCity] = useState("");
   const [error, setError] = useState(null);
   const [loadingCenters, setLoadingCenters] = useState(false);
+  const [selectedCenter, setSelectedCenter] = useState(null);
 
   // Fetch recycling centers on component mount
   useEffect(() => {
@@ -57,13 +59,20 @@ const HomePage = (props) => {
     return () => clearTimeout(timeout);
   }, [error]);
 
+  const handleOpenModal = (center) => {
+    setSelectedCenter(center);
+  };
+
+  const handleCloseModal = () => {
+    setSelectedCenter(null);
+  };
+
   return (
     <div className="container-fluid mt-0">
       {/* Header */}
-      <header>
-       
+      <header className="hero-banner text-center">
         {/* Hero Section */}
-        <div className="hero-banner mt-0 text-center my-4">
+        <div className=" mt-0 text-center my-4">
           <div
             id="recyclingFactsCarousel"
             className="carousel slide"
@@ -88,24 +97,24 @@ const HomePage = (props) => {
               ))}
             </div>
           </div>
+        </div>
 
-          <h1 className="display-4 text-white">
-            Find Recycling Centers Near You
-          </h1>
-          <p className="lead text-white">Enter your city to get started</p>
+        <h1 className="display-4 text-white">
+          Find Recycling Centers Near You
+        </h1>
+        <p className="lead text-white">Enter your city to get started</p>
 
-          {/* Search Bar */}
-          <div className="input-group mb-3">
-            <input
-              type="text"
-              className="form-control"
-              placeholder="Search for Cities"
-              aria-label="Search for Cities"
-              aria-describedby="button-search"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-          </div>
+        {/* Search Bar */}
+        <div className="input-group mb-3">
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Search for Cities"
+            aria-label="Search for Cities"
+            aria-describedby="button-search"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
         </div>
       </header>
 
@@ -121,7 +130,7 @@ const HomePage = (props) => {
             </div>
           )}
 
-          <div className="d-flex flex-lg-row flex-column-reverse">
+          <div className="d-flex flex-lg-row flex-column-reverse justify-content-center">
             {/* Map Section */}
             <div className="col-lg-8 col-sm-12">
               <div className="card">
@@ -173,12 +182,19 @@ const HomePage = (props) => {
                                 : "🤍 Favorite"}
                             </button>
                             <p>
-                              {" "}
                               <strong className="text-warning">
                                 {center.name}
                               </strong>
                               <br />
                               {center.address}, {center.city}
+                              <br />
+                              <span
+                                className="text-primary"
+                                style={{ cursor: "pointer" }}
+                                onClick={() => handleOpenModal(center)}
+                              >
+                                View Details
+                              </span>
                             </p>
                           </li>
                         </div>
@@ -196,6 +212,40 @@ const HomePage = (props) => {
       <footer className="text-center p-3">
         &copy; 2024 GreenCycle. All rights reserved.
       </footer>
+      {/* Modal */}
+      {selectedCenter && (
+        <div
+          className="modal fade show"
+          tabIndex="-1"
+          style={{ display: "block" }}
+          role="dialog"
+        >
+          <div className="modal-dialog" role="document">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title">{selectedCenter.name}</h5>
+                <button
+                  type="button"
+                  className="btn-close"
+                  onClick={handleCloseModal}
+                ></button>
+              </div>
+              <div className="modal-body mt-0 pt-0 mb-0 pb-0">
+                <CenterView center={selectedCenter} />
+              </div>
+              <div className="modal-footer">
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  onClick={handleCloseModal}
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

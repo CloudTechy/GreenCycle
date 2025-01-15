@@ -31,13 +31,6 @@ def create_app(config_class='config.DevelopmentConfig'):
     # Initialize Migrate
     migrate.init_app(app, db)
 
-    # automatically upgrade the database
-    @app.before_request
-    def initialize_database():
-        """Automatically apply migrations."""
-        with app.app_context():
-            upgrade()
-    
     # Register Blueprints
     from routes import init_routes
     init_routes(app, prefix='/api')
@@ -51,4 +44,6 @@ def create_app(config_class='config.DevelopmentConfig'):
     return app
 if __name__ == '__main__':
     app = create_app('config.DevelopmentConfig')
+    with app.app_context():
+        upgrade()
     app.run(debug=True)
