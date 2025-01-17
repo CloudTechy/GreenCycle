@@ -33,7 +33,6 @@ const App = () => {
     //   return false;
     // }
     //check if the user has favorited the center
-    console.log(center.id, favorites.includes(center.id));
     return favorites.includes(center.id);
   };
 

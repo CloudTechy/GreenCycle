@@ -231,7 +231,7 @@ const HomePage = (props) => {
                 ></button>
               </div>
               <div className="modal-body mt-0 pt-0 mb-0 pb-0">
-                <CenterView center={selectedCenter} />
+                <CenterView center={selectedCenter} userLocation={newLocation} />
               </div>
               <div className="modal-footer">
                 <button

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Spinner, Alert, Card } from 'react-bootstrap';
+import { Spinner, Alert, Card, Button } from 'react-bootstrap';
 import MapView from './MapView';
-import { FaPhone, FaMapMarker } from "react-icons/fa";
+import { FaPhone, FaMapMarker, FaRoute, FaMapSigns } from "react-icons/fa";
 
 const CenterView = (props) => {
 
@@ -41,7 +41,9 @@ const CenterView = (props) => {
                                 <Card.Title className='text-success'>{"Information"}</Card.Title>
                                 <Card.Text><FaMapMarker className='text-warning'/> &nbsp; {props.center.address}</Card.Text>
                                 <Card.Text><FaPhone className='text-warning'/> &nbsp; {props.center.phone}</Card.Text>
-                                <Card.Text className='small badge badge-primary text-success p-2' style={{outline:"green solid 3px"}} >{"20KM from your location"}</Card.Text>
+                               <Button variant="success" href={getDirectionsLink(props.center, props.userLocation)} target="_blank">
+                                    <FaRoute /> &nbsp; Get Directions
+                                </Button>
                             </Card.Body>
                         </Card>
                     </div>
@@ -56,3 +58,7 @@ const CenterView = (props) => {
 }
 
 export default CenterView;
+
+const getDirectionsLink = (center) => {
+    return `https://www.google.com/maps/dir/?api=1&destination=${center.latitude},${center.longitude}`;
+};
