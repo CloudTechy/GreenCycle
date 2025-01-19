@@ -57,6 +57,7 @@ const HomePage = (props) => {
         }
       );
     } else {
+      setNewLocation([0, 0]);
       console.error("Geolocation is not supported by this browser.");
     }
   }, []);
@@ -112,7 +113,7 @@ const HomePage = (props) => {
         <h1 className="display-4 text-white">
           Find Recycling Centers Near You
         </h1>
-        <p className="lead text-white">Enter your city to get started</p>
+        <p className="lead text-white">Enter your city to get started.</p>
 
         {/* Search Bar */}
         <div className="input-group mb-3">
