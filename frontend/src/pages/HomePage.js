@@ -48,10 +48,11 @@ const HomePage = (props) => {
         },
         (error) => {
           console.error(`Error (${error.code}): ${error.message}`);
+          alert(`Error (${error.code}): ${error.message}`)
         },
         {
           enableHighAccuracy: true, // Request more precise location data
-          timeout: 100000, // Max time to wait (ms)
+          timeout: 10000, // Max time to wait (ms)
           maximumAge: 0, // Prevent caching of location
         }
       );
