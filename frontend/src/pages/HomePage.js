@@ -40,15 +40,24 @@ const HomePage = (props) => {
 
   // Fetch user's geolocation on component mount
   useEffect(() => {
-    fetch("http://ip-api.com/json/")
-      .then((response) => response.json())
-      .then((data) => {
-        const { lat, lon } = data;
-        setNewLocation([lat, lon]);
-      })
-      .catch((error) => {
-        console.error("Error fetching geolocation data:", error);
-      });
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          setNewLocation([latitude, longitude]);
+        },
+        (error) => {
+          console.error(`Error (${error.code}): ${error.message}`);
+        },
+        {
+          enableHighAccuracy: true, // Request more precise location data
+          timeout: 100000, // Max time to wait (ms)
+          maximumAge: 0, // Prevent caching of location
+        }
+      );
+    } else {
+      console.error("Geolocation is not supported by this browser.");
+    }
   }, []);
 
   // Auto-dismiss error message after 3 seconds
@@ -231,7 +240,10 @@ const HomePage = (props) => {
                 ></button>
               </div>
               <div className="modal-body mt-0 pt-0 mb-0 pb-0">
-                <CenterView center={selectedCenter} userLocation={newLocation} />
+                <CenterView
+                  center={selectedCenter}
+                  userLocation={newLocation}
+                />
               </div>
               <div className="modal-footer">
                 <button
