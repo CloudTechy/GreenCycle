@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Spinner, Alert, Card, Button } from 'react-bootstrap';
 import MapView from './MapView';
-import { FaPhone, FaMapMarker, FaRoute, FaMapSigns } from "react-icons/fa";
+import { FaPhone, FaMapMarker, FaRoute } from "react-icons/fa";
 
 const CenterView = (props) => {
 
