@@ -21,7 +21,7 @@ const HomePage = (props) => {
         const response = await fetchCenters();
         setCenters(response.data);
       } catch (err) {
-        setError("Failed to fetch recycling centers. Please try again later.");
+        setError("Failed to fetch recycling centers. Please try again later.", err);
       } finally {
         setLoadingCenters(false);
       }
