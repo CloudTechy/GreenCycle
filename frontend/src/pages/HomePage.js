@@ -51,9 +51,9 @@ const HomePage = (props) => {
           alert(`Error (${error.code}): ${error.message}`)
         },
         {
-          enableHighAccuracy: true, // Request more precise location data
-          timeout: 10000, // Max time to wait (ms)
-          maximumAge: 0, // Prevent caching of location
+          enableHighAccuracy: true, 
+          timeout: 50000,
+          maximumAge: 0,
         }
       );
     } else {
